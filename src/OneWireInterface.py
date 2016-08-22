@@ -25,6 +25,7 @@ class OneWireSensor():
             base_dir = '/sys/bus/w1/devices/'
             device_folder = glob.glob(base_dir + '28*')[0]
             self.device_file = device_folder + '/w1_slave'
+            self.initialized = True
         except:
             return
         return

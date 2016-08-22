@@ -17,7 +17,7 @@ import wx.xrc
 class MyFrame1 ( wx.Frame ):
 	
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 800,480 ), style = wx.MAXIMIZE|wx.STAY_ON_TOP|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 800,480 ), style = wx.MAXIMIZE|wx.STAY_ON_TOP|wx.NO_BORDER|wx.TAB_TRAVERSAL )
 		
 		self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
 		
@@ -61,12 +61,18 @@ class MyFrame1 ( wx.Frame ):
 		
 		bSizer7 = wx.BoxSizer( wx.VERTICAL )
 		
+		bSizer9 = wx.BoxSizer( wx.VERTICAL )
+		
 		self.m_panel2 = wx.Panel( self.m_panel_mainView, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.m_panel2.SetMaxSize( wx.Size( -1,420 ) )
 		
-		bSizer7.Add( self.m_panel2, 1, wx.EXPAND |wx.ALL, 5 )
+		bSizer9.Add( self.m_panel2, 1, wx.EXPAND |wx.ALL, 5 )
+		
+		
+		bSizer7.Add( bSizer9, 1, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_TOP|wx.EXPAND, 5 )
 		
 		self.m_panel8 = wx.Panel( self.m_panel_mainView, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.m_panel8.SetMinSize( wx.Size( -1,60 ) )
 		self.m_panel8.SetMaxSize( wx.Size( -1,60 ) )
 		
 		bSizer8 = wx.BoxSizer( wx.HORIZONTAL )
