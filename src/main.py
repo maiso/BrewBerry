@@ -5,12 +5,32 @@ Created on Aug 17, 2016
 '''
 import pidGUI
 import wx
-import Servo
+import OneWireInterface
+#import Servo
+
+
+import time, threading
+import datetime
+UpdateGraph = None
+
+def StartTemperatureLoop():
+    global UpdateGraph
+    print datetime.datetime.now()
+    print 'AAAAA' 
+    temperature = StartTemperatureLoop.temp.read_temp()
+    if(temperature != None):
+        UpdateGraph(temperature)
+    threading.Timer(1, StartTemperatureLoop).start()
 
 app = wx.App()
-serv = Servo.Servo()
-top = pidGUI.MyFrame1(None,serv)
-top.Show()
+#serv = Servo.Servo()
+wxApp = pidGUI.MyFrameSub(None)
+#wxApp.CreatePlot()
+tempSnor = OneWireInterface.OneWireSensor()
+StartTemperatureLoop.temp = tempSnor
+UpdateGraph = wxApp.UpdateGraph
+StartTemperatureLoop()
+wxApp.Show()
 app.MainLoop()
    
 

@@ -1,63 +1,60 @@
-# -*- coding: utf-8 -*- 
-
-###########################################################################
-## Python code generated with wxFormBuilder (version Feb 16 2016)
-## http://www.wxformbuilder.org/
-##
-## PLEASE DO "NOT" EDIT THIS FILE!
-###########################################################################
-
+import GUIGen
 import wx
-import wx.xrc
-import Servo
-###########################################################################
-## Class MyFrame1
-###########################################################################
 
-class MyFrame1 ( wx.Frame ):
-	
-	def __init__( self, parent, serv ):
-		self.serv = serv
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 800,480 ), style = wx.MAXIMIZE|wx.STAY_ON_TOP|wx.TAB_TRAVERSAL )
-		
-		self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
-		
-		bSizer1 = wx.BoxSizer( wx.VERTICAL )
-		
-		self.m_panel1 = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-		gSizer1 = wx.GridSizer( 0, 2, 0, 0 )
-		
-		self.m_button1 = wx.Button( self.m_panel1, wx.ID_ANY, u"MyButton", wx.DefaultPosition, wx.DefaultSize, 0 )
-		gSizer1.Add( self.m_button1, 0, wx.ALL, 5 )
-		
-		self.m_slider1 = wx.Slider( self.m_panel1, wx.ID_ANY, 50, 0, 100, wx.DefaultPosition, wx.Size( 300,-1 ), wx.SL_AUTOTICKS|wx.SL_BOTH|wx.SL_HORIZONTAL|wx.SL_LABELS )
-		gSizer1.Add( self.m_slider1, 0, wx.ALL, 5 )
-		
-		self.m_radioBtn1 = wx.RadioButton( self.m_panel1, wx.ID_ANY, u"RadioBtn", wx.DefaultPosition, wx.DefaultSize, 0 )
-		gSizer1.Add( self.m_radioBtn1, 0, wx.ALL, 5 )
-		
-		self.m_gauge1 = wx.Gauge( self.m_panel1, wx.ID_ANY, 100, wx.DefaultPosition, wx.DefaultSize, wx.GA_HORIZONTAL )
-		self.m_gauge1.SetValue( 0 ) 
-		gSizer1.Add( self.m_gauge1, 0, wx.ALL, 5 )
-		
-		self.m_slider1.Bind(wx.EVT_SLIDER, self.OnSliderScroll) 
-		
-		self.m_panel1.SetSizer( gSizer1 )
-		self.m_panel1.Layout()
-		gSizer1.Fit( self.m_panel1 )
-		bSizer1.Add( self.m_panel1, 1, wx.EXPAND |wx.ALL, 5 )
-		
-		
-		self.SetSizer( bSizer1 )
-		self.Layout()
-		
-		self.Centre( wx.BOTH )
-	
-	def __del__( self ):
-		pass
-	
-	def OnSliderScroll(self, e): 
-		obj = e.GetEventObject() 
-		val = obj.GetValue() 
-		self.serv.setAngle(val)
+import matplotlib
+matplotlib.use('WXAgg')
+from matplotlib.figure import Figure
+import matplotlib.animation as manim
+from matplotlib.backends.backend_wxagg import \
+        FigureCanvasWxAgg as FigCanvas, \
+        NavigationToolbar2WxAgg as NavigationToolbar
+import numpy as np
+   
+class MyFrameSub(GUIGen.MyFrame1):
+    def __init__(self, parent):
+        # If we overload __init__ we still need to make sure the parent
+        # is initialized.
+        GUIGen.MyFrame1.__init__(self, parent)
+        self.x =  []
+        self.values = []
+        #NEW!!
+        self.figure = Figure()
+        self.ax = self.figure.add_subplot(111)
+        self.canv = FigCanvas(self.m_panel2, wx.ID_ANY, self.figure)
+        self.animator = manim.FuncAnimation(self.figure,self.anim, interval=1000)
+        return
 
+    def anim(self,i):
+#        if i%10 == 0:
+#            self.values = []
+#        else:
+#            self.values.append(np.random.rand())
+        print self.values
+        #print np.arange(1,i%10+1)
+        print i
+        print '-------'
+        self.ax.clear()
+        #self.ax.set_xlim([0,10])
+        #self.ax.set_ylim([0,100])        
+        return self.ax.plot(np.arange(0,len(self.values)),self.values,'r-')
+    
+    def UpdateGraph(self, new_data):
+        self.values.append(new_data)
+        #self.x.append(new_data)
+        #print self.x
+        #y = range(0,len(self.x))
+        #print y
+        #self.axes.clear()
+        #self.axes.plot(self.x, y)
+        ##self.line1.set_xdata(self.x)
+        ##self.line1.set_ydata(y)
+        #self.canvas.draw()
+        #self.canvas.Refresh()
+        return
+       
+    def CreatePlot(self):
+        self.figure = Figure()#figsize=(6, 4), dpi=100)
+        self.axes = self.figure.add_subplot(111)
+        #self.line1, = self.axes.plot(x, y, 'r-')
+        self.canvas = FigCanvas(self.m_panel2, wx.ID_ANY, self.figure)         
+        return
