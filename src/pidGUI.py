@@ -17,7 +17,7 @@ class MyFrameSub(GUIGen.MyFrame1):
         # is initialized.
         GUIGen.MyFrame1.__init__(self, parent)
         self.x =  []
-        self.values = None
+        self.values = []
 
         self.figure = Figure(facecolor='w', edgecolor='k')
         self.ax = self.figure.add_subplot(111)
@@ -27,20 +27,19 @@ class MyFrameSub(GUIGen.MyFrame1):
         return
 
     def anim(self,i):
-        print self.values
-        print i
-        print '-------'
+#        print self.values
+#        print i
+#        print '-------'
         self.ax.clear()
         #self.ax.set_xlim([0,10])
-        #self.ax.set_ylim([0,100])        
-        if(self.values == None):
+        self.ax.set_ylim([0,100])        
+        if(self.values == None or len(self.values) == 0):
             return
+        if(isinstance(self.values[-1], float)):
+            self.m_ActualTemperature.SetLabel("{:.2f}".format(self.values[-1]))
         return self.ax.plot(np.arange(0,len(self.values)),self.values,'r-')
     
     def UpdateGraph(self, new_data):
-        if(self.values == None):
-            self.values = [float(new_data)]
-        else:
-            self.values.append(new_data)
+        self.values.append(new_data)
         self.canv.Refresh()
         return
